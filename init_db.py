@@ -1,7 +1,7 @@
 from datetime import date
 
-from run import db
-from run import Movie
+from src import db
+from src.routes import Movie
 
 db.create_all()
 
