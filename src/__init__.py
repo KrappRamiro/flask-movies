@@ -30,3 +30,5 @@ else:
 
 db = SQLAlchemy(app)
 
+
+from src import routes

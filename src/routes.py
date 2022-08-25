@@ -27,5 +27,4 @@ def data():
 @app.route('/api/movies')
 def api_movies():
     json = [movie.as_dict() for movie in Movie.query.all()]
-    return 'a'
     return jsonify(json)
