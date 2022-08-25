@@ -1,7 +1,7 @@
 from datetime import date
 
-from app import db
-from app import Movie
+from run import db
+from run import Movie
 
 db.create_all()
 
