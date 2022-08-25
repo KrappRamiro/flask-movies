@@ -1,14 +1,14 @@
 import os
-from flask import Flask, jsonify
+from flask import Flask, jsonify, render_template, request
 from flask_sqlalchemy import SQLAlchemy
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = '5b3cd5b80eb8b217c20fb37074ff4a33'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-# app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///default.db'
 
+# Set the database URI
 if 'RDS_DB_NAME' in os.environ:
-    print("using the os.environ db")
+    print("using the ElasticBeanstalk db")
     app.config['SQLALCHEMY_DATABASE_URI'] = \
         'postgresql://{username}:{password}@{host}:{port}/{database}'.format(
         username=os.environ['RDS_USERNAME'],
@@ -18,7 +18,7 @@ if 'RDS_DB_NAME' in os.environ:
         database=os.environ['RDS_DB_NAME'],
     )
 else:
-    print("using the else db")
+    print("using the local postgresql db")
     app.config['SQLALCHEMY_DATABASE_URI'] = \
         'postgresql://{username}:{password}@{host}:{port}/{database}'.format(
         username='flask-movies',
@@ -28,15 +28,16 @@ else:
         database='flask-movies',
     )
 
-
 db = SQLAlchemy(app)
 
 
+# Define the db model for the movies
 class Movie(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(128), unique=True, nullable=False)
     release_date = db.Column(db.Date(), nullable=False)
 
+    # Return a list of all the movies as a dictionary
     def as_dict(self):
         return {c.name: getattr(self, c.name) for c in self.__table__.columns}
 
@@ -46,7 +47,21 @@ class Movie(db.Model):
 
 @app.route('/')
 def index():
-    return 'flask-movies'
+    return render_template("index.html")
+
+
+@app.route('/form')
+def form():
+    return render_template('form.html')
+
+
+@app.route('/data', methods=["POST", "GET"])
+def data():
+    if request.method == "GET":
+        return f"The URL /data was accesed directly. This is not valid, try going to /form to submit form, and that will redirect you to /data"
+    if request.method == "POST":
+        form_data = request.form
+        return render_template('data.html', form_data=form_data)
 
 
 @app.route('/api/movies')
