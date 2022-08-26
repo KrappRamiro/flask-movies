@@ -3,6 +3,8 @@ from datetime import date
 from src import db
 from src.routes import Movie
 
+# HACK, ese drop_all es bastante feo, es para "reiniciar" la base de datos
+db.drop_all()
 db.create_all()
 
 if Movie.query.count() == 0:

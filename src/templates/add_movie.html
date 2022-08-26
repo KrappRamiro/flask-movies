@@ -1,0 +1,21 @@
+{%extends 'base.html'%}
+{%block title%} Add movie {%endblock%}
+
+{% block content%}
+
+<body>
+	<form method="post">
+		{{form.hidden_tag()}}
+		<h1> Please add an item </h1>
+		{{form.title.label()}}
+		{{form.title(class="form-control", placeholder="Please set the title")}}
+		<br>
+		{{form.release_date.label()}}
+		{{form.release_date(class="form-control", placeholder="Please set the date")}}
+		<br>
+		{{form.submit(class="btn")}}
+		<br>
+	</form>
+</body>
+
+{%endblock%}

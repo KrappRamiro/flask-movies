@@ -1,9 +1,10 @@
 # This file is used for database models
 from src import db
 
+# Define the db model for the movies
 class Movie(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    title = db.Column(db.String(128), unique=True, nullable=False)
+    id = db.Column(db.Integer(), primary_key=True)
+    title = db.Column(db.String(128), nullable=False)
     release_date = db.Column(db.Date(), nullable=False)
 
     # Return a list of all the movies as a dictionary
